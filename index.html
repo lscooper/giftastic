@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>William Gifspeare</title>
+</head>
+
+<body>
+
+    <div id = "buttons-div">
+    <!--fill in buttons here-->
+    <button play-name="Hamlet">To be, or not to be...</button>
+    </div>
+
+    <form id="button-add">
+            <label for="play-input">Add a Play</label>
+            <input type="text" id="play-input"><br>
+            <input id="add-play" type="submit" value="Submit">
+        </form>
+    
+    
+      
+
+  <div id="gif-fill-div">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  var topics = ["Hamlet", "Coriolanus", "Othello", "Romeo and Juliet", "Much Ado About Nothing", "Henry V"];
+  var buttonDiv = $("<div>")
+
+function makeButtons() {
+
+$("#buttons-div").empty();
+
+
+for (var i = 0; i < topics.length; i++) {
+
+
+  var button = $("<button>");
+  button.attr("play-name", topics[i]);
+
+  button.text(topics[i]);
+
+
+  $("#buttons-div").append(button);
+}
+}
+
+
+$("#add-play").on("click", function(event) {
+        event.preventDefault();
+        var play = $("#play-input").val().trim();
+   
+
+        topics.push(play);
+
+        makeButtons();
+
+      });
+
+
+     $(document).on("click", "button", function() {
+      var play = $(this).attr("play-name");
+
+     
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+      play + "&api_key=bdY0VWdi3J8gKTnEnJCaSQLgIApJWAko&limit=10";
+
+      
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+
+        .then(function(response) {
+ 
+          var results = response.data;
+
+
+          for (var i = 0; i < results.length; i++) {
+
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+    
+              var newDiv = $("<div>");
+              var rating = results[i].rating;
+
+              // Creating a paragraph tag with the result item's rating
+              var p = $("<p>").text("Rating: " + rating);
+
+              // Creating an image tag
+              var playGif = $("<img>");
+
+              playGif.attr({
+                    src:results[i].images.fixed_height.url, 
+                    "gif-still":results[i].images.fixed_height_still.url,
+                    "gif-animated":results[i].images.fixed_height.url,
+                    "gif-state":"still",
+                    class:"gif"
+                                    });
+
+             //Give the image all the attributes
+
+            /*  playGif.attr("src", results[i].images.fixed_height.url);
+
+             
+              playGif.attr("gif-still", results[i].fixed_height_still.url)      
+              playGif.attr("gif-animated", results[i].images.fixed_height.url);
+              playGif.attr("gif-state", "still");
+              playGif.attr("class", "gif");  */
+            
+
+              // Appending the paragraph and personImage we created to the "gifDiv" div we created
+              newDiv.append(p);
+              newDiv.append(playGif);
+
+              $(".gif").on("click", function() {
+      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+      var state = $(this).attr("data-state");
+      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+      // Then, set the image's data-state to animate
+      // Else set src to the data-still value
+      if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+      } 
+    }); 
+
+              // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+              $("#gif-fill-div").prepend(newDiv);
+            }
+          }
+        });
+    });
+    makeButtons();
+
+  </script>
+</body>
+
+</html>
