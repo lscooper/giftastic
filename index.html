@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>William Gifspeare</title>
+  
 </head>
 
 <body>
@@ -87,51 +88,46 @@ $("#add-play").on("click", function(event) {
               var newDiv = $("<div>");
               var rating = results[i].rating;
 
-              // Creating a paragraph tag with the result item's rating
+        
               var p = $("<p>").text("Rating: " + rating);
 
-              // Creating an image tag
+
               var playGif = $("<img>");
 
-              playGif.attr({
-                    src:results[i].images.fixed_height.url, 
+              /* playGif.attr({
+                    src:results[i].images.fixed_height_still.url, 
                     "gif-still":results[i].images.fixed_height_still.url,
                     "gif-animated":results[i].images.fixed_height.url,
                     "gif-state":"still",
                     class:"gif"
-                                    });
+                                    });*/
 
              //Give the image all the attributes
 
-            /*  playGif.attr("src", results[i].images.fixed_height.url);
-
-             
-              playGif.attr("gif-still", results[i].fixed_height_still.url)      
+             playGif.attr("src", results[i].images.fixed_height_still.url);             
+              playGif.attr("gif-still", results[i].images.fixed_height_still.url)      
               playGif.attr("gif-animated", results[i].images.fixed_height.url);
               playGif.attr("gif-state", "still");
-              playGif.attr("class", "gif");  */
+              playGif.attr("class", "gif");  
             
 
-              // Appending the paragraph and personImage we created to the "gifDiv" div we created
               newDiv.append(p);
               newDiv.append(playGif);
 
-              $(".gif").on("click", function() {
-      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-      var state = $(this).attr("data-state");
-      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-      // Then, set the image's data-state to animate
-      // Else set src to the data-still value
+//   $(".gif").on("click", function()
+$(document).on("click", ".gif", function() {
+      console.log("You clicked me!");
+      var state = $(this).attr("gif-state");
+      console.log(state);
       if (state === "still") {
-        $(this).attr("src", $(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
+        $(this).attr("src", $(this).attr("gif-animated"));
+        $(this).attr("gif-state", "animate");
       } else {
-        $(this).attr("src", $(this).attr("data-still"));
-        $(this).attr("data-state", "still");
+        $(this).attr("src", $(this).attr("gif-still"));
+        $(this).attr("gif-state", "still");
       } 
     }); 
 
-              // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
               $("#gif-fill-div").prepend(newDiv);
             }
           }
