@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>William Gifspeare</title>
-  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
 </head>
 
 <body>
@@ -29,6 +29,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
 
+ $(document).ready(function() {
   var topics = ["Hamlet", "Coriolanus", "Othello", "Romeo and Juliet", "Much Ado About Nothing", "Henry V"];
   var buttonDiv = $("<div>")
 
@@ -104,12 +105,13 @@ $("#add-play").on("click", function(event) {
 
              //Give the image all the attributes
 
-             playGif.attr("src", results[i].images.fixed_height_still.url);             
+              playGif.attr("src", results[i].images.fixed_height.url);  
+                        
               playGif.attr("gif-still", results[i].images.fixed_height_still.url)      
               playGif.attr("gif-animated", results[i].images.fixed_height.url);
-              playGif.attr("gif-state", "still");
+              playGif.attr("gif-state", "animate");
               playGif.attr("class", "gif");  
-            
+              console.log("gif " + i + "is: " + playGif.src ); 
 
               newDiv.append(p);
               newDiv.append(playGif);
@@ -119,12 +121,14 @@ $(document).on("click", ".gif", function() {
       console.log("You clicked me!");
       var state = $(this).attr("gif-state");
       console.log(state);
-      if (state === "still") {
+      if (state == "still") {
         $(this).attr("src", $(this).attr("gif-animated"));
         $(this).attr("gif-state", "animate");
+        return;
       } else {
         $(this).attr("src", $(this).attr("gif-still"));
         $(this).attr("gif-state", "still");
+        return;
       } 
     }); 
 
@@ -134,7 +138,7 @@ $(document).on("click", ".gif", function() {
         });
     });
     makeButtons();
-
+  });
   </script>
 </body>
 
